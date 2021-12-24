@@ -15,6 +15,7 @@ import got, { Options, Response } from 'got'
 import { join } from 'path'
 import { IAudioMetadata } from 'music-metadata'
 import { once } from 'events'
+import Axios from 'axios'
 
 const platformMap = {
     'aix': 'AIX',
@@ -467,4 +468,15 @@ export function extensionForMediaMessage(message: WAMessageContent) {
         extension = getExtension (messageContent.mimetype)
     }
     return extension
+}
+
+export async function getLatestVersion() {
+    try {
+        const { data } = await Axios.get("https://web.whatsapp.com/check-update?version=2.2147.16&platform=web")
+        const { currentVersion } = data
+        const versionArray = currentVersion.split('.')
+        return versionArray
+    } catch (error) {
+        return false
+    }
 }

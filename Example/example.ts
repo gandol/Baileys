@@ -9,12 +9,17 @@ import {
     ReconnectMode,
     ProxyAgent,
     waChatKey,
+    getLatestVersion,
 } from '../src/WAConnection'
 import * as fs from 'fs'
 
 async function example() {
+    const latestVersion = await getLatestVersion() //get latest version from whatsapp endpoint
     const conn = new WAConnection() // instantiate
     conn.autoReconnect = ReconnectMode.onConnectionLost // only automatically reconnect when the connection breaks
+    if(latestVersion){ // set to latest version
+        conn.version = latestVersion
+    }
     conn.logger.level = 'debug' // set to 'debug' to see what kind of stuff you can implement
     // attempt to reconnect at most 10 times in a row
     conn.connectOptions.maxRetries = 10
